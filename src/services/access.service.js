@@ -6,6 +6,8 @@ const crypto = require('node:crypto');
 const KeyTokenService = require('./keyToken.service');
 const { createTokenPair } = require('../auth/authUtils');
 const { getInfoData } = require('../utils');
+const { BadRequestError, AuthFailureError } = require('../core/error.response');
+const { findByEmail } = require('./shop.service');
 
 const RoleShop = {
     SHOP: 'SHOP',
@@ -15,17 +17,48 @@ const RoleShop = {
 }
 
 class AccessService {
+    /*
+    login
+    1. check email in dbs
+    2. match password
+    3. create AccessToken, RefreshToken and save
+    4. generate tokens
+    5. get data return login 
+    */
 
-    static signUp = async ( {name, email, password}) => {
-        try {
+    static login = async ({email, password, refreshToken = null}) => {
+        //1.
+        const foundShop = await findByEmail({email})
+        if(!foundShop) throw new BadRequestError('Shop not registered')
+        //2.
+        const match = bcrypt.compare(password, foundShop.password)
+        if(!match) throw new AuthFailureError('Authentication Error')
+        //3.
+        const publicKey = crypto.randomBytes(64).toString()
+        const privateKey = crypto.randomBytes(64).toString()
+        //4.
+        const { _id: userId} = foundShop
+        const tokens = await createTokenPair({userId, email}, publicKey, privateKey)
+        await KeyTokenService.createKeyToken({
+            refreshToken: tokens.refreshToken,
+            privateKey,
+            publicKey,
+            userId
+        })
+        return {
+            shop: getInfoData({ fields: ['_id', 'name', 'email'], obj: foundShop}),
+            tokens
+            
+        }
+        
+    }
+
+    static signUp = async ({ name, email, password}) => {
+        
             //step 1: check email exists?
-
             const holderShop = await shopModel.findOne({ email}).lean();
             if( holderShop){
-                return {
-                    code: 'xxxx',
-                    messsage: 'Shop already registered'
-                }
+                throw new BadRequestError('Error: Shop already registered')
             }
             const passwordHash = await bcrypt.hash(password, 10);
             const newShop = await shopModel.create({
@@ -67,6 +100,7 @@ class AccessService {
             // const publicKeyObj = crypto.createPublicKey( publicKeyString)
             const tokens = await createTokenPair({userId: newShop._id, email}, publicKey, privateKey)
             console.log('Create token success::', tokens)
+            
             return {
                 code: 201,
                 metadata: {
@@ -80,13 +114,6 @@ class AccessService {
             metadata: null
         }
             
-        } catch (error) {
-            return {
-                code: 'xxx',
-                message: error.message,
-                status: 'error'
-            }
-        }
     }
 }
 
