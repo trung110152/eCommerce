@@ -9,8 +9,8 @@ const ReasonStatusCode = {
     CONFLICT: 'Conflict Error'
 }
 
+
 const { ReasonPhrases, StatusCodes} = require('../utils/httpStatusCode')
-const { UNAUTHORIZED } = require('../utils/statusCodes')
 class ErrorRespone extends Error {
     
     constructor(message, status) {
@@ -34,13 +34,29 @@ class BadRequestError extends ErrorRespone {
 
 class AuthFailureError extends ErrorRespone {
 
-    constructor(message = ReasonPhrases.UNAUTHORIZED, status = UNAUTHORIZED) {
-        super(message, status)
+    constructor(message = ReasonPhrases.UNAUTHORIZED, statusCode = StatusCodes.UNAUTHORIZED) {
+        super(message, statusCode)
+    }
+}
+
+class NotFoundError extends ErrorRespone {
+
+    constructor(message = ReasonPhrases.NOT_FOUND, statusCode = StatusCodes.NOT_FOUND) {
+        super(message, statusCode)
+    }
+}
+
+class ForbiddenError extends ErrorRespone {
+
+    constructor(message = ReasonPhrases.FORBIDDEN, statusCode = StatusCodes.FORBIDDEN) {
+        super(message, statusCode)
     }
 }
 
 module.exports = {
     ConflictRequestError,
     BadRequestError,
-    AuthFailureError
+    AuthFailureError,
+    NotFoundError,
+    ForbiddenError
 }

@@ -24,7 +24,7 @@ class Database {
             )
         .catch( err => console.error('Connection error:', err));
     }
-
+    // Trien khai Singleton dam bao chi tao 1 doi tuong duy nhat, chi co 1 ket noi toi dbs
     static getInstance() {
         if(!Database.instance) {
             Database.instance = new Database();

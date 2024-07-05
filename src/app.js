@@ -21,18 +21,20 @@ require('./dbs/init.mongodb');
 //init routes
 app.use('/', require('./routes'))
 //handling error
+
+//1. neu ko co router nào phù hợp thì tra ve loi 404
 app.use((req, res, next) => {
-    const error = new Error('Not Found')
+    const error = new Error('Not Found :: App.js!')
     error.status = 404
     next(error)
 })
-
+//2. Xu ly loi (1.) truyen ve hoac bat ky loi o cac noi khac gui ve
 app.use((error, req, res, next) => {
     const statusCode = error.status || 500
-    return res.status( statusCode).json({
+    return res.status( statusCode ).json({
         status: 'error',
         code: statusCode,
-        message: error.message || 'Internal Server Error'
+        message: error.message || 'Internal Server Error :: App.js'
     })
 })
 

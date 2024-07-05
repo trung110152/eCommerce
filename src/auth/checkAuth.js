@@ -35,7 +35,7 @@ const permisson = ( permission ) => {
         return res.status(403).json({
             message: 'Permission Denied'
         })
-        console.log(req.objKey.permissions)
+        // console.log(req.objKey.permissions)
         const validPermission = req.objKey.permissions.includes(permission)
         if(!validPermission){
             return res.status(403).json({
@@ -46,6 +46,8 @@ const permisson = ( permission ) => {
     }
 }
 
+
+// xu ly cac ham bat dong bo trach viec dung lap lai try/catch nhieu lan
 const asyncHandler = fn => {
     return (req, res, next) => {
         fn(req, res, next).catch(next)
