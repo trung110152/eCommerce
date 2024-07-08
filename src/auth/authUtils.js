@@ -36,7 +36,7 @@ const createTokenPair = async ( payload, publicKey, privateKey) => {
     }
 }
 
-const authencation = asyncHandler( async (req, res, next) => {
+const authentication = asyncHandler( async (req, res, next) => {
     /*
     1. Check user missing
     2. Get accessToken
@@ -71,6 +71,6 @@ const verifyJWT = async ( token, keySecret ) => {
 
 module.exports  = { 
     createTokenPair,
-    authencation,
+    authentication,
     verifyJWT
 }

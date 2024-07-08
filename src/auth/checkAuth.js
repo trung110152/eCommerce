@@ -29,7 +29,7 @@ const apiKey = async ( req, res, next) => {
     }
 }
 
-const permisson = ( permission ) => {
+const permission = ( permission ) => {
     return (req, res, next) => {
         if(!req.objKey.permissions)
         return res.status(403).json({
@@ -47,7 +47,8 @@ const permisson = ( permission ) => {
 }
 
 
-// xu ly cac ham bat dong bo trach viec dung lap lai try/catch nhieu lan
+// xu ly cac ham bat dong bo tranh viec dung lap lai try/catch nhieu lan
+//utility function
 const asyncHandler = fn => {
     return (req, res, next) => {
         fn(req, res, next).catch(next)
@@ -55,6 +56,6 @@ const asyncHandler = fn => {
 }
 module.exports = {
     apiKey,
-    permisson,
+    permission,
     asyncHandler
 }

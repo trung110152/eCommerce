@@ -28,20 +28,24 @@ class AccessService {
             const { userId, email } = await verifyJWT( refreshToken, foundToken.privateKey )
             console.log({ userId, email})
             await KeyTokenService.deleteKeyById( userId)
-            throw new ForbiddenError('Something wrong happend, please relogin!')
+            throw new ForbiddenError('Something wrong happened, please re-login!')
         }
 
         //if NO
         const holderToken = await KeyTokenService.findByRefreshToken( refreshToken )
         if(!holderToken) throw new AuthFailureError('Shop not registered!')
+
         //Verify token
         const { userId, email } = await verifyJWT( refreshToken, holderToken.privateKey )
         console.log(`2::`,{ userId, email })
+
         //Check userId
         const foundShop = await findByEmail({ email})
         if(!foundShop) throw new AuthFailureError('Shop not registered!')
+
         //Create token fair
         const tokens = await createTokenPair({userId, email}, holderToken.publicKey, holderToken.privateKey)
+        
         //Update token
         await holderToken.updateOne({
             $set: {
@@ -57,7 +61,7 @@ class AccessService {
         }
     }
 
-    //Detele key
+    //Delete key
     static logout = async ( keyStore ) => {
         const delKey = await KeyTokenService.removeKeyById( keyStore._id )
         return delKey
@@ -71,19 +75,19 @@ class AccessService {
     4. generate tokens
     5. get data return login 
     */
-    static login = async ({email, password, refreshToken = null}) => {
+    static login = async ({ email, password, refreshToken = null}) => {
         //1.
-        const foundShop = await findByEmail({email})
+        const foundShop = await findByEmail({ email })
         if(!foundShop) throw new BadRequestError('Shop not registered')
         //2.
-        const match = bcrypt.compare(password, foundShop.password)
+        const match = bcrypt.compare( password, foundShop.password )
         if(!match) throw new AuthFailureError('Authentication Error')
         //3.
         const publicKey = crypto.randomBytes(64).toString()
         const privateKey = crypto.randomBytes(64).toString()
         //4.
         const { _id: userId} = foundShop
-        const tokens = await createTokenPair({userId, email}, publicKey, privateKey)
+        const tokens = await createTokenPair({ userId, email }, publicKey, privateKey)
         await KeyTokenService.createKeyToken({
             refreshToken: tokens.refreshToken,
             privateKey,
@@ -138,7 +142,7 @@ class AccessService {
             if( !keyStore){
                 return {
                     code: 'xxxx',
-                    messsage: 'KeyStore Error'
+                    message: 'KeyStore Error'
                 }
             } 
             // create token pair

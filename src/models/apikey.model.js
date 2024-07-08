@@ -1,8 +1,8 @@
 'use strict'
 
 const { model, Schema}  = require('mongoose'); // Erase if already required
-const DOCUMENT_NAME = "Apikey";
-const COLLECTION_NAME = "Apikeys";
+const DOCUMENT_NAME = "ApiKey";
+const COLLECTION_NAME = "ApiKeys";
 // Declare the Schema of the Mongo model
 var apiKeySchema = new Schema({
     key:{

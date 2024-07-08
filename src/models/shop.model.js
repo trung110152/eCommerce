@@ -22,10 +22,10 @@ const shopSchema = new Schema({
     },
     status:{
         type: String,
-        emun: ['active', 'inactive'],
+        enum: ['active', 'inactive'],
         default: 'inactive'
     },
-    verfify:{
+    verify:{
         type: Schema.Types.Boolean,
         default: false
     },

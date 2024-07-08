@@ -10,7 +10,7 @@ const ReasonStatusCode = {
     CREATED: 'Create!'
 }
 
-class SuccessResuest {
+class SuccessRequest {
 
     constructor({message, statusCode = StatusCode.OK, reasonStatusCode = ReasonStatusCode.OK, metadata= {}}) {
         this.message = message? message: reasonStatusCode
@@ -22,14 +22,14 @@ class SuccessResuest {
     }
 }
 
-class OK extends SuccessResuest {
+class OK extends SuccessRequest {
 
     constructor({message, metadata}) {
         super({message, metadata})
     }
 }
 
-class CREATED extends SuccessResuest {
+class CREATED extends SuccessRequest {
 
     constructor({message, statusCode = StatusCode.CREATED, reasonStatusCode = ReasonStatusCode.CREATED, metadata}) {
         super(message, statusCode, reasonStatusCode, metadata)
@@ -38,5 +38,5 @@ class CREATED extends SuccessResuest {
 module.exports = {
     OK, 
     CREATED,
-    SuccessResuest
+    SuccessRequest
 }
