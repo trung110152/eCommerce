@@ -7,6 +7,19 @@ x-api-key: e124eed8e522522a65372ffa9f66e157e014b5046404ca2b0681b94c1ce2662c870ed
 
 {
     "name": "Cao Trung",
-    "email": "trung110111@gmail.com",
+    "email": "trung110113@gmail.com",
     "password": "abc123"
+}
+
+### contact
+
+POST {{url_dev}}/contact
+Content-Type: application/json
+x-api-key: e124eed8e522522a65372ffa9f66e157e014b5046404ca2b0681b94c1ce2662c870edd645a0a2c9c1dc69d575b7a2c90dfa5581e4914f3870741ba1a84b7f7be
+
+{
+    "name": "Cao Trung",
+    "email": "trung110113@gmail.com",
+    "phone": "0981641139",
+    "message": "IT service, please"
 }
