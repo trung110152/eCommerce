@@ -9,14 +9,7 @@ class ContactController {
             const newContact = await ContactService.createContact(req.body);
             
             // Thêm thông báo mới
-            await NotificationService.addNotification({
-                message: 'New Contact!',
-                contact: {
-                    name: newContact.name,
-                    email: newContact.email,
-                    phone: newContact.phone,
-                }
-            });
+            await NotificationService.addNotification(`New Contact Recorded by ${newContact.name}!`);
             
             new CREATED({
                 message: 'INFORMATION RECORDED',

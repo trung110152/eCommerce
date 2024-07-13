@@ -1,20 +1,16 @@
 'use strict'
-
+const notificationModel = require('../models/notification.model')
 class NotificationService {
     static addNotification = async(notification) => {
-        this.notifications.push(notification);
-        // Có thể thêm logic để giới hạn số lượng thông báo được lưu trữ
-        if (this.notifications.length > 100) {
-            this.notifications.shift(); // Xóa thông báo cũ nhất nếu vượt quá 100
-        }
+        await notificationModel.create({content: notification})
     }
 
     static getNotifications = async () => {
-        return this.notifications;
+        return notificationModel.find()
     }
 
     static clearNotifications = async () => {
-        this.notifications = [];
+        notificationModel.deleteMany()
         return true;
     }
 }

@@ -6,18 +6,11 @@ const DOCUMENT_NAME = "Notification";
 const COLLECTION_NAME = "Notifications";
  
 const notificationSchema = new Schema({
-    name: { 
+    type: { 
         type: String, 
-        required: true 
+        default: '0' 
     },
-    email: { 
-        type: String, 
-        required: true 
-    },
-    phone: { 
-        type: String 
-    },
-    message: { 
+    content: { 
         type: String, 
         required: true 
     }
